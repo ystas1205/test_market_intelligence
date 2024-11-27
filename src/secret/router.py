@@ -1,6 +1,6 @@
 from shutil import which
 from cryptography.fernet import Fernet
-import bcrypt
+# import bcrypt
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
@@ -31,6 +31,14 @@ router = APIRouter(
 @router.post("/", response_model=SecretResponse)
 async def generate(car: CreateSecret,
                    session: As = Depends(get_async_session)):
+    """
+        Generate a new secret.
+
+        - **secret**: The secret string to be encrypted.
+        - **code_phrase**: The code phrase used for encryption.
+        - **TTL**: Time to live for the secret.
+    """
+
     try:
         secret_key = Fernet.generate_key()
 
@@ -65,6 +73,12 @@ async def generate(car: CreateSecret,
 @router.get("/{secret_key}")
 async def get_secret(secret_key: str,
                      session: As = Depends(get_async_session)):
+    """
+        Retrieve a secret by its key.
+
+        - **secret_key**: The key of the secret to retrieve.
+    """
+
     try:
 
         query = select(Secret.secret, Secret.code_phrase).filter(

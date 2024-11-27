@@ -11,9 +11,9 @@ from src.models.models import Secret
 
 celery_app = Celery('tasks', broker='redis://localhost:6379/0')
 
-"""  Асинхронное извлечения секретов из базы данных, проверки
- их срока действия и удаления устаревших записей. Celery используется для 
- выполнения этой задачи в фоновом режиме"""
+""" Asynchronous retrieval of secrets from the database, checking their
+expiration, and deleting outdated records. Celery is used to perform this task
+ in the background."""
 
 
 async def get_secret():
@@ -46,7 +46,6 @@ async def run_main():
 @celery_app.task
 def main():
     # Запускаем асинхронную функцию
-
     #  Функция возвращает текущий цикл событий.
     #  Если цикл событий еще не создан, он будет создан автоматически
     loop = asyncio.get_event_loop()
